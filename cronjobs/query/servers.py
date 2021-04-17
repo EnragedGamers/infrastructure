@@ -19,7 +19,7 @@ def query():
     dist = [] # will handle raw servers data
 
     for server, port in servers.items():
-        tmp = { 'server': server, 'status': 1, 'address': ip + str(port) }
+        tmp = { 'server': server, 'status': 1, 'address': '{0}:{1}'.format(ip, str(port)) }
 
         query = SourceQuery.SourceQuery(ip, port)
 
@@ -39,7 +39,8 @@ def write_client(data, location='public_html/'):
     if not os.path.exists(path):
         print('[Servers data] There is a problem with the \'servers.json\' file location.')
         return
-    with open(path, 'r+') as f:
+    with open(path, 'w+') as f:
+        f.truncate(0) # make sure the file is empty before writing in it
         f.write(data.clientJson())
 
 def main(args):
