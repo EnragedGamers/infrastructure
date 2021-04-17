@@ -23,10 +23,10 @@ class Server:
         self.ping = serv['info']['ping']
         self.players = serv['players']
 
-    def playerCount():
+    def playerCount(self):
         return len(players)
 
-    def getInfo(info):
+    def getInfo(self, info):
         if self.status == 0: return ''
         if not info in self.info: raise LookupError
 
@@ -41,11 +41,11 @@ class Data:
 
     def __init__(self, servers, client):
         for server in servers:
-            servers.append(Server(server))
+            self.servers.append(Server(server))
 
         self.client = client
 
-    def clientJson():
+    def clientJson(self):
         """Build the data accessible by users throught web"""
         data = {}
         for server in self.servers:
@@ -56,8 +56,6 @@ class Data:
             srv_data['infos'] = {}
             for info in self.client:
                 srv_data['infos'][info] = server.getInfo(info)
-
-            srv_data['info']['nb_players'] = servers.playerCount()
 
             data[server.id] = srv_data
 

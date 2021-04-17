@@ -19,7 +19,7 @@ def query():
     dist = [] # will handle raw servers data
 
     for server, port in servers.items():
-        tmp = { 'server': server, 'status': 1, 'address': ip + port }
+        tmp = { 'server': server, 'status': 1, 'address': ip + str(port) }
 
         query = SourceQuery.SourceQuery(ip, port)
 
@@ -37,7 +37,7 @@ def query():
 def write_client(data, location='public_html/'):
     path = os.path.join(location, 'servers.json')
     if not os.path.exists(path):
-        print('There is a problem with the \'servers.json\' file location.')
+        print('[Servers data] There is a problem with the \'servers.json\' file location.')
         return
     with open(path, 'r+') as f:
         f.write(data.clientJson())
@@ -47,9 +47,14 @@ def main(args):
         'client': write_client
     }
 
+    if len(args) == 0:
+        print('[Servers data] You must use one of the available data query by passing it as a parameter.')
+        return
     if not args[0] in available:
         print('[Servers data] The data you\'re trying to gather ({0}) isn\'t supported yet'.format(args[0]))
         return
+
+    dist = query()
 
     data = Data.Data(dist, [
         'map',
